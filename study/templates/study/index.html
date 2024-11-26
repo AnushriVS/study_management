@@ -1,0 +1,89 @@
+{% extends "study/base.html" %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            {% if study %}
+            <div class="card bg-light ms-4 me-4 mb-4" style="background-color: #b4e1e7 !important;">
+                <div class="card-header">Study Records</div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <form id="delete-form" method="POST">
+                            {% csrf_token %}
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" id="select-all"></th>
+                                        <th>Study Name</th>
+                                        <th>Study Phase</th>
+                                        <th>Sponsor Name</th>
+                                        <th>Study Description</th>
+                                        <th>View</th>
+                                        <th>Edit</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for s in study %}
+                                    <tr>
+                                        <td><input type="checkbox" name="selected_studies" value="{{ s.id }}"></td>
+                                        <td>{{ s.study_name }}</td>
+                                        <td>{{ s.study_phase }}</td>
+                                        <td>{{ s.sponsor_name }}</td>
+                                        <td>{{ s.study_description }}</td>
+                                        <td>
+                                            <a class="btn" style="background-color: #D3D3D3; color: black;" href="#" data-bs-toggle="modal" data-bs-target="#myModal{{ s.id }}">View</a>
+                                            <!-- Modal Component -->
+                                            <div class="modal fade" id="myModal{{ s.id }}" tabindex="-1" aria-labelledby="myModalLabel{{ s.id }}" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="myModalLabel{{ s.id }}">Study: {{ s.study_name }} - {{ s.study_phase }}</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <ul class="list-unstyled">
+                                                                <li>Study Name: <strong>{{ s.study_name }}</strong></li>
+                                                                <li>Study Phase: <strong>{{ s.study_phase }}</strong></li>
+                                                                <li>Sponsor Name: <strong>{{ s.sponsor_name }}</strong></li>
+                                                                <li>Study Description: <strong>{{ s.study_description }}</strong></li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        
+                    
+                                        <td>
+                                            <a class="btn" style="background-color: #D3D3D3; color: black;" href="{% url 'edit' s.id %}">Edit</a>
+
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            <div class="d-flex justify-content-center mt-2">
+                                <a href="{% url 'add' %}" class="btn btn-primary" style="margin-right: 200px;">Add</a>
+                                <button type="button" class="btn btn-danger" id="delete-button">Delete</button>
+                            </div>
+                            
+                            
+                            
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <h5 class="alert alert-primary ms-4 me-4">No study records</h5>
+            <div class="d-flex justify-content-center mt-3">
+                <a href="{% url 'add' %}" class="btn btn-primary">Add New Record</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
